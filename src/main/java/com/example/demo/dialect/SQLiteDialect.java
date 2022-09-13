@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.dialect;
 
 import org.hibernate.dialect.Dialect;
 import org.hibernate.dialect.function.SQLFunctionTemplate;
