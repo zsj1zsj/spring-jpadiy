@@ -1,32 +1,47 @@
 package com.example.demo.support;
 
 import com.example.demo.entities.User;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
+
+@AllArgsConstructor
+@Slf4j
 public class SimpleJpaSupport implements JpaRepository {
-    @Autowired
-    EntityManager em;
+    private LocalContainerEntityManagerFactoryBean entityManagerFactory;
+    private EntityManager entityManager;
+//
+//    EntityManager em;
+//
+//    SimpleJpaSupport(LocalContainerEntityManagerFactoryBean entityManagerFactory) {
+//        em = entityManagerFactory.createNativeEntityManager(null);
+//    }
 
     @Override
     public Object save(Object entity) {
-        return null;
+        log.info("save function");
+        EntityTransaction trx = entityManager.getTransaction();
+        trx.begin();
+        entityManager.persist(entity);
+        trx.commit();
+        return entity;
     }
 
     @Override
     public Optional findById(Object o) {
-        System.out.format("implement find by id : %d\n", (long) o);
-        User user /*= em.find(User.class, (long) o);*/
-        = new User();
+        User user = entityManager.find(User.class, (long) o);
         return Optional.of(user);
     }
 
