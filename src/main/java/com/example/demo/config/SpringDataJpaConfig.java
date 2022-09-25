@@ -17,7 +17,7 @@ import java.util.Properties;
 
 @Configuration
 //@EnableJpaRepositories("com.example.demo.repository")
-@ComponentScan("com.example.demo.repository")
+@ComponentScan(basePackages = {"com.example.demo.core"})
 @EnableTransactionManagement
 public class SpringDataJpaConfig {
 
@@ -35,8 +35,8 @@ public class SpringDataJpaConfig {
     }
 
     @Bean
-    public EntityManager entityManager(){
-        LocalContainerEntityManagerFactoryBean localContainerEntityManagerFactoryBean =entityManagerFactory();
+    public EntityManager entityManager() {
+        LocalContainerEntityManagerFactoryBean localContainerEntityManagerFactoryBean = entityManagerFactory();
         return localContainerEntityManagerFactoryBean.createNativeEntityManager(null);
     }
 
@@ -58,7 +58,6 @@ public class SpringDataJpaConfig {
         Properties properties = new Properties();
 //        properties.setProperty("hibernate.hbm2ddl.auto", "create-drop");
         properties.setProperty("hibernate.dialect", "org.sqlite.hibernate.dialect.SQLiteDialect");
-
         return properties;
     }
 

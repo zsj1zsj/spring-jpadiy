@@ -9,12 +9,13 @@ public class Main {
     public static void main(String[] args) throws Exception {
         AnnotationConfigApplicationContext ioc = new AnnotationConfigApplicationContext(SpringDataJpaConfig.class);
 
-        UserRepository repository = (UserRepository) ioc.getBean("jpaFactoryBean");
+        UserRepository repository = (UserRepository) ioc.getBean("userRepository");
         User u1 = new User();
         u1.setName("Sara");
-        u1.setId(10L);
+        u1.setId(11L);
         repository.save(u1);
-        System.out.println("users: " + repository.findById(9L));
+
+        System.out.println("users: " + repository.findById(11L));
 
     }
 }

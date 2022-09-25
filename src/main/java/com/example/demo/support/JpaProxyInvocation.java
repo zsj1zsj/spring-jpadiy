@@ -11,17 +11,16 @@ import java.lang.reflect.Method;
 public class JpaProxyInvocation implements InvocationHandler {
     LocalContainerEntityManagerFactoryBean localContainerEntityManagerFactoryBean;
     EntityManager entityManager;
+    Class clazz;
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        SimpleJpaSupport support = new SimpleJpaSupport(localContainerEntityManagerFactoryBean, entityManager);
+        SimpleJpaSupport support = new SimpleJpaSupport(localContainerEntityManagerFactoryBean, entityManager,clazz);
         Object param = args[0];
         Object result;
-        if(method.getName()=="findById") {
-            result = support.findById(param);
-        }else{
-            result = support.save(param);
-        }
+        Method jpaMethod = support.getClass().getMethod(method.getName(), method.getParameterTypes());
+        System.out.println(jpaMethod.getName());
+        result = jpaMethod.invoke(support,args);
         return result;
     }
 }

@@ -1,6 +1,5 @@
 package com.example.demo.support;
 
-import com.example.demo.entities.User;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Example;
@@ -22,6 +21,7 @@ import java.util.function.Function;
 public class SimpleJpaSupport implements JpaRepository {
     private LocalContainerEntityManagerFactoryBean entityManagerFactory;
     private EntityManager entityManager;
+    Class clazz;
 //
 //    EntityManager em;
 //
@@ -29,6 +29,10 @@ public class SimpleJpaSupport implements JpaRepository {
 //        em = entityManagerFactory.createNativeEntityManager(null);
 //    }
 
+    /*
+         * todo: 暂时@Transactional注解还是无效，需要搞清楚原因。
+         (可能是该bean并没有交由spring管理的原因，目前是直接在JpaProxyInvocation中new出来的）
+         */
     @Override
     public Object save(Object entity) {
         log.info("save function");
@@ -41,8 +45,7 @@ public class SimpleJpaSupport implements JpaRepository {
 
     @Override
     public Optional findById(Object o) {
-        User user = entityManager.find(User.class, (long) o);
-        return Optional.of(user);
+        return Optional.of(entityManager.find(clazz, (long) o));
     }
 
     @Override
